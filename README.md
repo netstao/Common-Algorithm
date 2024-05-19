@@ -5,7 +5,7 @@
 1. 随机 
 2. 接近有序 
 3. 大量重复
-    Test for random array, size = 10000000, random range [0, 10000000]
+    ```Test for random array, size = 10000000, random range [0, 10000000]
     Merge Sort : 1.2529 s
     Quick Sort : 0.667784 s
     Quick Sort 3 Ways : 0.713644 s
@@ -18,4 +18,4 @@
     Test for random array, size = 10000000, random range [0,10]
     Merge Sort : 0.735248 s
     Quick Sort : 0.248669 s
-    Quick Sort 3 Ways : 0.107921 s
+    Quick Sort 3 Ways : 0.107921 s```
