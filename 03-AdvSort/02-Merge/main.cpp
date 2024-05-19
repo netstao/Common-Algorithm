@@ -39,6 +39,22 @@ void insertionSort(T arr[], int n){
     return;
 }
 
+// 对arr[l...r]范围的数组进行插入排序
+template<typename T>
+void insertionSort(T arr[], int l, int r){
+
+    for( int i = l+1 ; i <= r ; i ++ ) {
+
+        T e = arr[i];
+        int j;
+        for (j = i; j > l && arr[j-1] > e; j--)
+            arr[j] = arr[j-1];
+        arr[j] = e;
+    }
+
+    return;
+}
+
 
 // 将arr[l...mid]和arr[mid+1...r]两部分进行归并
 template<typename  T>
@@ -117,8 +133,11 @@ template<typename T>
 void __mergeSort(T arr[], int l, int r){
 
     // 如果左边界大于等于右边界，说明当前区间无需排序，直接返回
-    if( l >= r )
+    // 优化2: 对于小规模数组, 使用插入排序
+    if( r - l <= 15 ){
+        insertionSort(arr, l, r);
         return;
+    }
 
     // 计算中间位置
     int mid = (l+r)/2;
@@ -129,8 +148,11 @@ void __mergeSort(T arr[], int l, int r){
     // 递归对右半部分进行归并排序
     __mergeSort(arr, mid+1, r);
 
-    // 合并左右两个有序区间
-    __merge(arr, l, mid, r);
+    // 优化1: 对于arr[mid] <= arr[mid+1]的情况,不进行merge
+    // 对于近乎有序的数组非常有效,但是对于一般情况,有一定的性能损失
+    if( arr[mid] > arr[mid+1] )
+        __merge(arr, l, mid, r);
+
 }
 
 template<typename T>
@@ -153,18 +175,34 @@ int main() {
     // 可以在1秒之内轻松处理100万数量级的数据
     // 注意：不要轻易尝试使用SelectionSort, InsertionSort或者BubbleSort处理100万级的数据
     // 否则，你就见识了O(n^2)的算法和O(nlogn)算法的本质差异：）
-    int n = 100000000;
+    int n = 1000000;
 
     // 测试1 一般性测试
     cout<<"Test for random array, size = "<<n<<", random range [0, "<<n<<"]"<<endl;
     int* arr1 = SortTestHelper::generateRandomArray(n,0,n);
     int* arr2 = SortTestHelper::copyIntArray(arr1, n);
+    
 
     // SortTestHelper::testSort("Insertion Sort", insertionSort, arr1, n);
     SortTestHelper::testSort("Merge Sort",     mergeSort,     arr2, n);
 
+    // 测试2 测试近乎有序的数组
+    int swapTimes = 10;
+    assert( swapTimes >= 0 );
+
+    cout<<"Test for nearly ordered array, size = "<<n<<", swap time = "<<swapTimes<<endl;
+    arr1 = SortTestHelper::generateNearlyOrderedArray(n,swapTimes);
+    arr2 = SortTestHelper::copyIntArray(arr1, n);
+    // arr3 = SortTestHelper::copyIntArray(arr1, n);
+
+    SortTestHelper::testSort("Insertion Sort", insertionSort, arr1, n);
+    SortTestHelper::testSort("Merge Sort",     mergeSort,     arr2, n);
+    // SortTestHelper::testSort("Merge Sort 2",   mergeSort2,    arr3, n);
+
     delete[] arr1;
     delete[] arr2;
+    // delete[] arr3;
+
 
     cout<<endl;
     return 0;
