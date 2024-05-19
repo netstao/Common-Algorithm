@@ -131,7 +131,7 @@ int main() {
 
     // 测试1 一般性测试
     cout<<"Test for random array, size = "<<n<<", random range [0, "<<n<<"]"<<endl;
-    int* arr1 = SortTestHelper::generateRandomArray(n,0,10);
+    int* arr1 = SortTestHelper::generateRandomArray(n,0,n);
     int* arr2 = SortTestHelper::copyIntArray(arr1,n);
 
     SortTestHelper::testSort("Merge Sort", mergeSort, arr1, n);
