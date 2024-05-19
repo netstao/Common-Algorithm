@@ -66,8 +66,8 @@ void __merge(T arr[], int l, int mid, int r){
     //* VS不支持动态长度数组, 即不能使用 T aux[r-l+1]的方式申请aux的空间
     //* 使用VS的同学, 请使用new的方式申请aux空间
     //* 使用new申请空间, 不要忘了在__merge函数的最后, delete掉申请的空间:)
-    T aux[r-l+1];
-    // T *aux = new T[r-l+1];
+    // T aux[r-l+1];   //当数据过大时  1000万事 会段错误，栈空间不够
+    T *aux = new T[r-l+1];   //堆空间分配内存 1000万顺利排序 1亿也可以顺利排序
 
     // 将arr[l]到arr[r]的元素复制到aux数组中
     for( int i = l ; i <= r; i ++ )
@@ -100,7 +100,7 @@ void __merge(T arr[], int l, int mid, int r){
     }
 
     // 在函数最后，释放通过new申请的aux数组空间
-    //delete[] aux;
+    delete[] aux;
 }
 
 // 递归使用归并排序,对arr[l...r]的范围进行排序
@@ -153,7 +153,7 @@ int main() {
     // 可以在1秒之内轻松处理100万数量级的数据
     // 注意：不要轻易尝试使用SelectionSort, InsertionSort或者BubbleSort处理100万级的数据
     // 否则，你就见识了O(n^2)的算法和O(nlogn)算法的本质差异：）
-    int n = 1000000;
+    int n = 100000000;
 
     // 测试1 一般性测试
     cout<<"Test for random array, size = "<<n<<", random range [0, "<<n<<"]"<<endl;
