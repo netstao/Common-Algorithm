@@ -46,4 +46,62 @@
     Quick Sort 3 Ways : 0.103528 s
     Heap Sort 1 : 0.61475 s
     Heap Sort 2 Heapify : 0.600641 s
-```
+    ```
+
+# 归并 普通快排 双路快排 三路快排 最大堆-O(nlogn) 最大堆Heapify-O(n) 最大堆优化 1000万对比
+- 第一次直接 最大堆优化原始的shiftDown std::swap
+    ```
+    Test for random array, size = 10000000, random range [0, 10000000]
+    Merge Sort : 1.24907 s
+    Quick Sort : 0.659602 s
+    Quick Sort 2 Ways : 0.672222 s
+    Quick Sort 3 Ways : 0.698285 s
+    Heap Sort 1 : 3.02872 s
+    Heap Sort 2 Heapify : 3.22713 s
+    Heap Sort 3 Optimize : 2.71861 s
+
+    Test for nearly ordered array, size = 10000000, swap time = 100
+    Merge Sort : 0.200171 s
+    Quick Sort : 0.183591 s
+    Quick Sort 2 Ways : 0.182653 s
+    Quick Sort 3 Ways : 0.274377 s
+    Heap Sort 1  : 0.714994 s
+    Heap Sort 2 Heapify : 0.628182 s
+    Heap Sort 3 Optimize : 0.577857 s
+
+    Test for random array, size = 10000000, random range [0,10]
+    Merge Sort : 0.69072 s
+    Quick Sort 2 Ways : 0.256066 s
+    Quick Sort 3 Ways : 0.111478 s
+    Heap Sort 1 : 0.634931 s
+    Heap Sort 2 Heapify : 0.601321 s
+    Heap Sort 3 Optimize : 0.553766 s
+    ```
+- 第二次 最大堆优化使用赋值的方式取代不断的std::swap
+    ```
+    Test for random array, size = 10000000, random range [0, 10000000]
+    Merge Sort : 1.17105 s
+    Quick Sort : 0.65378 s
+    Quick Sort 2 Ways : 0.673984 s
+    Quick Sort 3 Ways : 0.691761 s
+    Heap Sort 1 : 3.07411 s
+    Heap Sort 2 Heapify : 2.8649 s
+    Heap Sort 3 Optimize : 2.80469 s
+
+    Test for nearly ordered array, size = 10000000, swap time = 100
+    Merge Sort : 0.195288 s
+    Quick Sort : 0.181181 s
+    Quick Sort 2 Ways : 0.195207 s
+    Quick Sort 3 Ways : 0.268691 s
+    Heap Sort 1  : 0.695593 s
+    Heap Sort 2 Heapify : 0.615506 s
+    Heap Sort 3 Optimize : 0.549197 s
+
+    Test for random array, size = 10000000, random range [0,10]
+    Merge Sort : 0.705984 s
+    Quick Sort 2 Ways : 0.278444 s
+    Quick Sort 3 Ways : 0.111828 s
+    Heap Sort 1 : 0.678285 s
+    Heap Sort 2 Heapify : 0.593424 s
+    Heap Sort 3 Optimize : 0.538811 s
+    ```
