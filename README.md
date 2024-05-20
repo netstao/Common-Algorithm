@@ -1,7 +1,7 @@
 # Common-Algorithm
 常用算法C++实现
 
-# 归并排序 双路快排 三路快排对比 1000万测试 
+## 归并排序 双路快排 三路快排对比 1000万测试 
 1. 随机 
 2. 接近有序 
 3. 大量重复
@@ -22,7 +22,7 @@
     Quick Sort 3 Ways : 0.107921 s
     ```
 
-# 归并 普通快排 双路快排 三路快排 最大堆-O(nlogn) 最大堆Heapify-O(n) 1000万对比
+## 归并 普通快排 双路快排 三路快排 最大堆-O(nlogn) 最大堆Heapify-O(n) 1000万对比
     ```
     Test for random array, size = 10000000, random range [0, 10000000]
     Merge Sort : 1.33142 s
@@ -48,7 +48,7 @@
     Heap Sort 2 Heapify : 0.600641 s
     ```
 
-# 归并 普通快排 双路快排 三路快排 最大堆-O(nlogn) 最大堆Heapify-O(n) 最大堆优化 1000万对比
+## 归并 普通快排 双路快排 三路快排 最大堆-O(nlogn) 最大堆Heapify-O(n) 最大堆优化 1000万对比
 - 第一次直接 最大堆优化原始的shiftDown std::swap
     ```
     Test for random array, size = 10000000, random range [0, 10000000]
