@@ -217,13 +217,29 @@ public:
         return rootIdx;
     }
 
+    bool contain(int idx)
+    {
+        assert(idx + 1 >= 1 && idx + 1 <= capacity);
+        return reverse[idx+1] != 0;
+    }
+
      Item getItem(int idx)
     {
+        assert(contain(idx))
         return data[idx+1];
     }
 
+    /**
+     * @brief 修改堆中指定位置的元素
+     *
+     * 根据给定的索引和元素，更新堆结构中的指定位置元素。
+     *
+     * @param idx 索引位置
+     * @param item 待更新的元素
+     */
     void changeItem(int idx, Item item)
     {
+        assert(contain(idx))
         // 更新堆结构
         int index = idx + 1;
         data[index] = item;

@@ -44,7 +44,7 @@ private:
             // 计算出左右子节点的索引
             int left = 2 * index;
             int right = 2 * index + 1;
-            int largest = index; // 假设当前节点最大
+            int largest = index; // 假设当前节点最大 
             
             // 找出左右子节点和当前节点中的最大值
             if (left <= count && data[left] > data[largest]) {
