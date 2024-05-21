@@ -14,19 +14,29 @@ template <typename Item>
 class IndexMaxHeap{
     
 private:
-    Item* data;
-    int* indexs;
+    Item *data;
+    int  *indexs;
+    int  *reverse; //最大索引堆中的反向索引, reverse[i] = x 表示索引i在x的位置
+
     int count;
     int capacity;
 
     void shiftUp(int idx)
     {
+        // 当父节点的值小于当前节点的值时执行循环
+        // idx > 1 代表已经是根节点了
+        // idx/2 代表当前节点的父节点索引
+        // 父节点小于当前节点交换位置
         // 当父节点的值小于当前节点的值时执行循环 idx > 1 代表已经是根节点了
         //idx/2 代表当前节点的父节点索引 idx代表当前节点的索引 父节点小于当前节点交换位置
         while (idx > 1 &&  data[indexs[idx/2]] < data[indexs[idx]]) {
 
             // 交换当前节点和父节点的值
             swap(indexs[idx/2], indexs[idx]);
+            // 更新当前节点和父节点的反向索引
+            reverse[indexs[idx/2]] = idx/2;
+            reverse[indexs[idx]] = idx;
+
             // 将索引更新为当前节点的父节点索引
             idx /= 2;
         }
@@ -59,6 +69,8 @@ private:
             // 如果最大值不是当前节点，则交换并继续向下调整
             if (largest != idx) {
                 swap(indexs[idx], indexs[largest]);
+                reverse[indexs[idx]] = idx;
+                reverse[indexs[largest]] = largest;
                 idx = largest; // 更新索引为被交换的节点
             } else {
                 break; // 当前节点已经是最大值，无需继续调整
@@ -110,6 +122,10 @@ public:
         indexs(new int[capacity+1])
     {
         data = new Item[capacity + 1];  // 索引从1开始
+        reverse = new int[capacity+1];
+        for ( int i = 0; i <= capacity; ++i ) {
+            reverse[i] = 0;
+        }
     }
 
     IndexMaxHeap(Item arr[], int n): count(n), capacity(n)
@@ -133,6 +149,7 @@ public:
     ~MaxHeap(){
         delete[] data;
         delete[] indexs;
+        delete[] reverse;
     }
 
     int size() 
@@ -164,6 +181,7 @@ public:
     {
         // 断言：确保插入后元素数量不超过容量
         assert(count + 1 <= capacity);
+        // 断言：确保插入位置合法
         assert(idx + 1 >=1 && idx + 1 <= capacity);
 
         // 将新元素插入到数组的下一个位置
@@ -172,6 +190,8 @@ public:
 
         // 记录插入位置的索引
         indexs[count+1] = idx;
+        // 记录插入位置的逆序索引
+        reverse[idx] = count+1;
 
         // 更新元素数量
         count++;
@@ -189,7 +209,10 @@ public:
 
         // 将最后一个元素与根节点交换
         swap(indexs[1], indexs[count]);
+        reverse[indexs[1]] = 1;
+        reverse[indexs[count]] = 0;
         count--;
+
         // 从根节点开始向下调整堆结构
         shiftDown(1);
 
@@ -207,6 +230,8 @@ public:
 
         // 将最后一个元素与根节点交换
         swap(indexs[1], indexs[count]);
+        reverse[indexs[1]] = 1;
+        reverse[indexs[count]] = 0;
         count--;
         // 从根节点开始向下调整堆结构
         shiftDown(1);
@@ -226,14 +251,17 @@ public:
         int index = idx + 1;
         data[index] = item;
         // 找到indexs[j] = i, j表示data[i]在堆中的位置
-        for( int j = 1 ; j <= count ; j ++ )
-        {
-            if( indexs[j] == i ){
-                shiftUp(j);
-                shiftDown(j);
-                return;
-            }
-        }
+        // for( int j = 1 ; j <= count ; j ++ )
+        // {
+        //     if( indexs[j] == i ){
+        //         shiftUp(j);
+        //         shiftDown(j);
+        //         return;
+        //     }
+        // }
+        int j = reverse[index];
+        shiftUp(j);
+        shiftDown(j);
     }
 
     // 以树状打印整个堆结构
