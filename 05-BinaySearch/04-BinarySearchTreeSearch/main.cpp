@@ -60,6 +60,7 @@ private:
             // 如果键大于当前节点的键，则在右子树中插入
             node->right = insert( node->right, key, value);
         }
+        return node;
     }
     
     // 查看以node为根的二分搜索树中是否包含键值为key的节点, 使用递归算法
@@ -188,7 +189,7 @@ int main(int argc, char const *argv[])
 
         time_t endTime = clock();
 
-        cout << "BST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+        cout << "二分搜索树 BST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
         cout << endl;
 
 
@@ -215,7 +216,7 @@ int main(int argc, char const *argv[])
 
         endTime = clock();
 
-        cout << "SST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+        cout << "第三方库 SequenceST SST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
     }
     return 0;
 }

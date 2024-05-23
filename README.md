@@ -112,3 +112,15 @@
     Heap Sort 2 Heapify : 0.593424 s
     Heap Sort 3 Optimize : 0.538811 s
     ```
+
+
+# 对圣经 god 词频统计
+    ```
+    There are totally 431180 words in bible.txt
+
+    'god' : 2301
+    二分搜索树 BST , time: 0.057559 s.
+
+    'god' : 2301
+    第三方库 SequenceST SST , time: 3.15761 s.
+    ```
