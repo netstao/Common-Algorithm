@@ -167,62 +167,6 @@ private:
         }
     }
 
-    // 查找最小值节点，即键最小的节点
-    Key minMum(){
-        assert(root != NULL);
-        Node* node = root;
-
-        while(node->left != NULL)
-            node = node->left;
-        return node->key;
-    }
-
-    Key maxMum(){
-        assert(root != NULL);
-
-        Node* node = root;
-
-        if (node->right == NULL) return node;
-
-        while(node->right != NULL)
-            node = node->right;
-        return node->key;
-    }
-
-
-    Node * removeMin(Node *node)
-    {
-        if(node->left == NULL)
-        {
-            Node *rightNode = node->right;
-            delete node;
-            count--;
-            return rightNode;
-        }
-        else
-        {
-            Node *temp = removeMin(node->left);
-            node->left = temp;
-            return node;
-        }
-    }
-
-    Node * removeMax(Node *node)
-    {
-        if(node->right == NULL)
-        {
-            Node *leftNode = node->left;
-            delete node;
-            count--;
-            return leftNode;
-        }
-        else
-        {
-            node->right = removeMin(node->right);
-            return node;
-        }
-    }
-
     void destroy(Node* node){
         if(node == NULL)
             return;
@@ -277,49 +221,6 @@ public:
     {
         return count == 0;
     }
-
-    Node *minnimum(Node *node)
-    {
-        if (node == NULL)
-            return NULL;
-        while(node->left != NULL)
-            node = node->left;
-        return node;
-    }
-
-    /**
-     * @brief 查找二叉树中的最大值节点
-     *
-     * 在给定的二叉树中，通过遍历找到最大的节点，并返回该节点的指针。
-     *
-     * @param node 二叉树的根节点指针
-     *
-     * @return 返回二叉树中最大值节点的指针，若二叉树为空则返回 NULL
-     */
-    Node *maxnimum(Node *node)
-    {
-        if (node == NULL)
-            return NULL;
-        while(node->right != NULL)
-            node = node->right;
-        return node;
-    }
-
-    
-    void removeMin()
-    {
-        if(root)
-            root = removeMin(root);
-
-    }
-
-    void removeMax()
-    {
-        if(root)
-            root = removeMax(root);
-
-    }
-
 };
 
 

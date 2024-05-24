@@ -114,7 +114,7 @@
     ```
 
 
-# 对圣经 god 词频统计
+# 二分搜索树 对圣经 god 词频统计
     ```
     There are totally 431180 words in bible.txt
 
