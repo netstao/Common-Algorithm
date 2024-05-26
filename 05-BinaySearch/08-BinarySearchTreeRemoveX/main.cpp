@@ -2,9 +2,11 @@
 #include <vector>
 #include "SequenceST.h"
 #include "FileOps.h"
+#include <queue>
+#include <algorithm>
+#include <random>
 
 using namespace std;
-
 
 template <typename Key, typename Value>
 class BST
@@ -25,6 +27,17 @@ private:
             // 将当前节点的左子节点和右子节点都初始化为NULL
             this->left = this->right = NULL;
         }
+
+        Node(Node *node){
+             // 复制节点的键值
+             this->key = node->key;
+             // 复制节点的值
+             this->value = node->value;
+             // 复制节点的左子节点
+             this->left = node->left;
+             // 复制节点的右子节点
+             this->right = node->right;
+         }
     };
 
     Node *root;
@@ -177,6 +190,109 @@ private:
         count--;
     }
 
+    // 查找最小值节点，即键最小的节点
+    Key minMum(){
+        assert(root != NULL);
+        Node* node = root;
+
+        while(node->left != NULL)
+            node = node->left;
+        return node->key;
+    }
+
+    Key maxMum(){
+        assert(root != NULL);
+
+        Node* node = root;
+
+        if (node->right == NULL) return node;
+
+        while(node->right != NULL)
+            node = node->right;
+        return node->key;
+    }
+
+
+    Node * removeMin(Node *node)
+    {
+        if(node->left == NULL)
+        {
+            Node *rightNode = node->right;
+            delete node;
+            count--;
+            return rightNode;
+        }
+        else
+        {
+            Node *temp = removeMin(node->left);
+            node->left = temp;
+            return node;
+        }
+    }
+
+    Node * removeMax(Node *node)
+    {
+        if(node->right == NULL)
+        {
+            Node *leftNode = node->left;
+            delete node;
+            count--;
+            return leftNode;
+        }
+        else
+        {
+            node->right = removeMin(node->right);
+            return node;
+        }
+    }
+
+    Node * remove(Node* node, Key key){
+        if(node == NULL)
+            return nullptr;
+
+        if (key < node->key)
+        {
+            node->left = remove(node->left, key);
+            return node;
+        } 
+        else if (key > node->key)
+        {
+            node->right = remove(node->right, key);
+            return node;
+        }
+        else  // key == node->key
+        {
+            if (node->left == NULL)
+            {
+                Node * rightNode = node->right;
+                delete node;
+                count--;
+                return rightNode;
+            }
+            if (node->right == NULL)
+            {
+                Node * leftNode = node->left;
+                delete node;
+                count--;
+                return leftNode;
+            }
+            // Node * delNode = node;
+            //
+            Node * successor = new Node(minMum(node->right));
+            count++;
+
+            successor->right = removeMin(node->right);
+            successor->left = node->left;
+
+            delete node;
+            count--;
+
+            return successor;
+        }
+    }
+        
+        
+
 public:
     BST()
     {
@@ -224,68 +340,47 @@ public:
 };
 
 
+void shuffle( int arr[], int n ){
+
+    srand( time(NULL) );
+    for( int i = n-1 ; i >= 0 ; i -- ){
+        int x = rand()%(i+1);
+        swap( arr[i] , arr[x] );
+    }
+}
+
+
+
 int main(int argc, char const *argv[])
 {
-    // 使用圣经作为我们的测试用例
-    string filename = "bible.txt";
-    vector<string> words;
-    if( FileOps::readFile(filename, words) ) {
+    srand(time(NULL));
+    BST<int,int> bst = BST<int,int>();
 
-        cout << "There are totally " << words.size() << " words in " << filename << endl;
-        cout << endl;
-
-
-        // 测试 BST
-        time_t startTime = clock();
-
-        // 统计圣经中所有词的词频
-        // 注: 这个词频统计法相对简陋, 没有考虑很多文本处理中的特殊问题
-        // 在这里只做性能测试用
-        BST<string, int> bst = BST<string, int>();;
-        for (vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) {
-            int *res = bst.search(*iter);
-            if (res == NULL)
-                bst.insert(*iter, 1);
-            else
-                (*res)++;
-        }
-
-        // 输出圣经中god一词出现的频率
-        if(bst.contain("god"))
-            cout << "'god' : " << *bst.search("god") << endl;
-        else
-            cout << "No word 'god' in " << filename << endl;
-
-        time_t endTime = clock();
-
-        cout << "二分搜索树 BST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
-        cout << endl;
-
-
-        // 测试顺序查找表 SST
-        startTime = clock();
-
-        // 统计圣经中所有词的词频
-        // 注: 这个词频统计法相对简陋, 没有考虑很多文本处理中的特殊问题
-        // 在这里只做性能测试用
-        SequenceST<string, int> sst = SequenceST<string, int>();
-        for (vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) {
-            int *res = sst.search(*iter);
-            if (res == NULL)
-                sst.insert(*iter, 1);
-            else
-                (*res)++;
-        }
-
-        // 输出圣经中god一词出现的频率
-        if(sst.contain("god"))
-            cout << "'god' : " << *sst.search("god") << endl;
-        else
-            cout << "No word 'god' in " << filename << endl;
-
-        endTime = clock();
-
-        cout << "第三方库 SequenceST SST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+    // 取n个取值范围在[0...n)的随机整数放进二分搜索树中
+    int n = 10000;
+    for( int i = 0 ; i < n ; i ++ ){
+        int key = rand()%n;
+        // 为了后续测试方便,这里value值取和key值一样
+        int value = key;
+        bst.insert(key,value);
     }
+    // 注意, 由于随机生成的数据有重复, 所以bst中的数据数量大概率是小于n的
+
+    // order数组中存放[0...n)的所有元素
+    int order[n];
+    for( int i = 0 ; i < n ; i ++ )
+        order[i] = i;
+    // 打乱order数组的顺序
+
+    // 乱序删除[0...n)范围里的所有元素
+    for( int i = 0 ; i < n ; i ++ )
+        if( bst.contain( order[i] )){
+            // bst.remove(Node &bst, order[i]);
+            cout<<"After remove "<<order[i]<<" size = "<<bst.size()<<endl;
+        }
+
+    // 最终整个二分搜索树应该为空
+    cout << bst.size() << endl;
+    
     return 0;
 }
