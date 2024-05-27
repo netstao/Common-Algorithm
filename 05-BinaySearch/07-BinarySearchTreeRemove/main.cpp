@@ -2,6 +2,7 @@
 #include <vector>
 #include "SequenceST.h"
 #include "FileOps.h"
+#include <assert.h>
 
 using namespace std;
 
@@ -177,6 +178,57 @@ private:
         count--;
     }
 
+    Node * minimum (Node * node)
+    {
+        // 如果节点的左子树为空
+        if(node->left == NULL)
+            // 返回当前节点作为最小值节点
+            return node;
+        else
+            // 递归调用minimum函数，传入当前节点的左子节点作为参数
+            return minimum(node->left);
+    }
+
+    Node * maximum (Node * node)
+    {
+        // 如果节点的左子节点为空
+        if(node->right == NULL)
+            // 返回当前节点
+            return node;
+        else
+            // 递归调用 minimum 函数，传入节点的左子节点
+            return maximum(node->right);
+    }
+
+    Node * removeMin(Node * node)
+    {
+        // 如果节点的左子节点为空
+        if(node->left == NULL) {
+            Node * rightNode = node->right;
+            delete rightNode;
+            count--;
+            return rightNode;
+        }
+
+        node->left = removeMin(node->left);
+        return node;
+        
+    }
+
+     Node * removeMax(Node * node)
+    {
+         // 如果节点的左子节点为空
+        if(node->right == NULL) {
+            Node * leftNode = node->left;
+            delete leftNode;
+            count--;
+            return leftNode;
+        }
+
+        node->right = removeMin(node->right);
+        return node;
+    }
+
 public:
     BST()
     {
@@ -220,6 +272,38 @@ public:
     bool isEmpty()
     {
         return count == 0;
+    }
+
+    Key minimum()
+    {
+        // 断言：确保count不等于0
+        assert(count !=0 );
+
+        // 调用辅助函数minimum，传入根节点root，获取最小节点的指针
+        Node * minNode =  minimum(root);
+
+        // 返回最小节点的key值
+        return minNode->key;
+    }
+
+    Key maximum()
+    {
+        // 断言，确保count不为0
+        assert(count !=0 );
+
+        // 调用辅助函数maximum(root)来获取最大值节点
+        Node * minNode =  maximum(root);
+
+        // 返回最大值节点的key
+        return minNode->key;
+    }
+
+    void removeMin()
+    {
+        // 断言，确保count不等于0
+        assert(count != 0);
+        // 调用辅助函数removeMin，传入根节点root
+        root = removeMin(root);
     }
 };
 
